@@ -547,7 +547,8 @@ function Get-ChocoVersion {
             $res = Import-Clixml $chocoVersion
         } else {
             $cmd = choco -v
-            $res = [System.Version]($cmd.Split('-')[0])
+            $verionLine = $cmd | Where-Object { $_ -match '^\d+(\.\d+){1,3}' } | Select-Object -Last 1
+            $res = [System.Version]($verionLine.Split('-')[0])
             if (-not $NoCache) {
                 $res | Export-Clixml -Path $chocoVersion
             }
